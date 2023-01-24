@@ -96,9 +96,9 @@ function createServerBoilerPlate(
  * This is only a minimal backend to get started.
  */
 
-import * as express from 'express';
+import express from 'express';
 import * as trpcExpress from '@trpc/server/adapters/express';
-import { trpcRouter } from '@acme-webdev/${fileName}-trpc-server';
+import { trpcRouter } from '@nx-trpc-demo/${fileName}-trpc-server';
 import { environment } from './environments/environment';
 
 const app = express();
@@ -129,7 +129,7 @@ function createAppTsxBoilerPlate(
   frontendPort: number
 ) {
   const { className, fileName } = names(name);
-  const appTsxBoilerPlate = `import { create${className}TrpcClient } from '@acme-webdev/${fileName}-trpc-client';
+  const appTsxBoilerPlate = `import { create${className}TrpcClient } from '@nx-trpc-demo/${fileName}-trpc-client';
 import { useEffect, useState } from 'react';
 
 export function App() {
@@ -151,7 +151,7 @@ export default App;
     ...json,
     targets: {
       ...json.targets,
-      serve: {
+      'serve-fullstack': {
         ...json.targets.serve,
         options: {
           ...json.targets.serve.options,
@@ -164,7 +164,7 @@ export default App;
 
 function createTrpcClientBoilerPlate(tree: Tree, name: string) {
   const { className, fileName } = names(name);
-  const trpcClientBoilerPlate = `import { ${className}TrpcRouter } from '@acme-webdev/${fileName}-trpc-server';
+  const trpcClientBoilerPlate = `import { ${className}TrpcRouter } from '@nx-trpc-demo/${fileName}-trpc-server';
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 
 export const create${className}TrpcClient = () =>
