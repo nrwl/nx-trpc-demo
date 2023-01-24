@@ -38,7 +38,7 @@
   },
   "workspaceLayout": {
     "appsDir": "apps",
-    "libsDir": "packages"
+    "libsDir": "libs"
   },
   "generators": {
     "@nrwl/react": {
