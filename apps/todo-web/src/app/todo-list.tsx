@@ -31,45 +31,63 @@ export default function TodoList() {
   };
 
   return (
-    <div>
-      <h1>Todo List</h1>
-      <form
-        onSubmit={(event) => {
-          console.log('submitting');
-          event.preventDefault();
-          addTodo.mutate({ description: newTodo });
-          setNewTodo('');
-        }}
-      >
-        <label htmlFor="todo">Add a new todo item: </label>
-        <TextInput
-          id="todo"
-          value={newTodo}
-          onChanges={(v) => {
-            setNewTodo(v);
+    <div className="m-2 flex items-center rounded-sm">
+      <div className="w-full px-4 mx-auto shadow lg:w-1/3">
+        <div className="flex items-center mb-6">
+          <h1 className="mr-6 text-4xl font-bold text-slate-400 text-center w-full">
+            Todo List
+          </h1>
+        </div>
+        <form
+          className="flex justify-center"
+          onSubmit={(event) => {
+            event.preventDefault();
+            addTodo.mutate({ description: newTodo });
+            setNewTodo('');
           }}
-        />
-        <button disabled={!newTodo || isLoading()} type="submit">
-          Create
-        </button>
-      </form>
-      <ul>
-        {todoList.data?.map((todo) => (
-          <li key={todo.id}>
-            <Item
-              disabled={isLoading()}
-              todo={todo}
-              handleClick={() => {
-                if (todo.complete) {
-                  markTodoIncomplete.mutate(todo.id);
-                } else {
-                  completeTodo.mutate(todo.id);
-                }
-              }}
-            />
-          </li>
-        ))}
-      </ul>
+        >
+          <label htmlFor="todo" className="pt-1 mr-2">
+            Add a new todo item:{' '}
+          </label>
+          <TextInput
+            id="todo"
+            value={newTodo}
+            onChanges={(v) => {
+              setNewTodo(v);
+            }}
+          />
+          <button
+            disabled={!newTodo || isLoading()}
+            type="submit"
+            className={[
+              'mx-4',
+              'p-1',
+              'rounded-sm',
+              !newTodo || isLoading() ? 'bg-slate-200' : 'bg-green-600',
+              'text-white',
+            ].join(' ')}
+          >
+            Create
+          </button>
+        </form>
+        <ul className="list-reset">
+          {todoList.data?.map((todo) => (
+            <li key={todo.id}>
+              <Item
+                disabled={isLoading()}
+                todo={todo}
+                handleClick={() => {
+                  if (todo.complete) {
+                    markTodoIncomplete.mutate(todo.id);
+                  } else {
+                    completeTodo.mutate(todo.id);
+                  }
+                }}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
@@ -90,6 +108,7 @@ function TextInput({ id, value, onChanges }: TextInputProps) {
       type="text"
       value={innerValue}
       id={id}
+      className="p-1 border rounded outline-none border-grey-600"
       onChange={(event) => {
         const newValue = event.target.value;
         setInnerValue(newValue);
@@ -109,7 +128,12 @@ function Item({
   disabled: boolean;
 }) {
   return (
-    <>
+    <div
+      className="p-2 border-2 m-2 rounded-md bg-slate-200 cursor-pointer shadow"
+      onClick={() => {
+        handleClick();
+      }}
+    >
       <input
         id={`${todo.id}`}
         type="checkbox"
@@ -120,7 +144,14 @@ function Item({
           handleClick();
         }}
       />
-      <label htmlFor={`${todo.id}`}>{todo.name}</label>
-    </>
+      <label
+        htmlFor={`${todo.id}`}
+        className={['pl-4', todo.complete ? 'line-through' : undefined].join(
+          ' '
+        )}
+      >
+        {todo.name}
+      </label>
+    </div>
   );
 }
