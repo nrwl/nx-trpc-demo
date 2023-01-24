@@ -151,7 +151,7 @@ export default App;
     ...json,
     targets: {
       ...json.targets,
-      'serve-fullstack': {
+      serve: {
         ...json.targets.serve,
         options: {
           ...json.targets.serve.options,
@@ -186,7 +186,7 @@ function addFullstackServeTarget(tree: Tree, options: AppGeneratorSchema) {
       ...json,
       targets: {
         ...json.targets,
-        serve: {
+        'serve-fullstack': {
           executor: '@nx-trpc-demo/trpc:serve',
           options: {
             frontendProject: frontEndKabobCase,
