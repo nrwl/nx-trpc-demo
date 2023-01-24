@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nx-trpc-demo/trpc": ["packages/trpc/src/index.ts"]
+      "@nx-trpc-demo/trpc": ["libs/trpc/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

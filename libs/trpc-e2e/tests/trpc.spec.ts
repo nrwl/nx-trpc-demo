@@ -14,7 +14,7 @@ describe('trpc e2e', () => {
   // on a unique project in the workspace, such that they
   // are not dependant on one another.
   beforeAll(() => {
-    ensureNxProject('@nx-trpc-demo/trpc', 'dist/packages/trpc');
+    ensureNxProject('@nx-trpc-demo/trpc', 'dist/libs/trpc');
   });
 
   afterAll(() => {

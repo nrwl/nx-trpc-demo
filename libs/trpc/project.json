@@ -1,35 +1,35 @@
 {
   "name": "trpc",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/trpc/src",
+  "sourceRoot": "libs/trpc/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/trpc",
-        "main": "packages/trpc/src/index.ts",
-        "tsConfig": "packages/trpc/tsconfig.lib.json",
+        "outputPath": "dist/libs/trpc",
+        "main": "libs/trpc/src/index.ts",
+        "tsConfig": "libs/trpc/tsconfig.lib.json",
         "assets": [
-          "packages/trpc/*.md",
+          "libs/trpc/*.md",
           {
-            "input": "./packages/trpc/src",
+            "input": "./libs/trpc/src",
             "glob": "**/!(*.ts)",
             "output": "./src"
           },
           {
-            "input": "./packages/trpc/src",
+            "input": "./libs/trpc/src",
             "glob": "**/*.d.ts",
             "output": "./src"
           },
           {
-            "input": "./packages/trpc",
+            "input": "./libs/trpc",
             "glob": "generators.json",
             "output": "."
           },
           {
-            "input": "./packages/trpc",
+            "input": "./libs/trpc",
             "glob": "executors.json",
             "output": "."
           }
@@ -41,10 +41,10 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "packages/trpc/**/*.ts",
-          "packages/trpc/generators.json",
-          "packages/trpc/executors.json",
-          "packages/trpc/package.json"
+          "libs/trpc/**/*.ts",
+          "libs/trpc/generators.json",
+          "libs/trpc/executors.json",
+          "libs/trpc/package.json"
         ]
       }
     },
@@ -52,7 +52,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/trpc/jest.config.ts",
+        "jestConfig": "libs/trpc/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {

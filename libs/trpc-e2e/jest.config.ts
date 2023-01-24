@@ -11,5 +11,5 @@ export default {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/packages/trpc-e2e',
+  coverageDirectory: '../../coverage/libs/trpc-e2e',
 };
