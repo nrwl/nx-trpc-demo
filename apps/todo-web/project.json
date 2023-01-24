@@ -1,0 +1,89 @@
+{
+  "name": "todo-web",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/todo-web/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/vite:build",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/todo-web"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "todo-web:build",
+        "proxyConfig": "apps/todo-web/proxy.conf.json",
+        "port": 3000
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "todo-web:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "todo-web:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nrwl/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "todo-web:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "todo-web:build:development"
+        },
+        "production": {
+          "buildTarget": "todo-web:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nrwl/vite:test",
+      "outputs": [
+        "coverage/apps/todo-web"
+      ],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/apps/todo-web"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/todo-web/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "serve-fullstack": {
+      "executor": "@nx-trpc-demo/trpc:serve",
+      "options": {
+        "frontendProject": "todo-web",
+        "backendProject": "todo-server"
+      }
+    }
+  },
+  "tags": []
+}

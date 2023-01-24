@@ -1,0 +1,38 @@
+{
+  "name": "todo-server",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/todo-server/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/todo-server",
+        "format": ["cjs"],
+        "main": "apps/todo-server/src/main.ts",
+        "tsConfig": "apps/todo-server/tsconfig.app.json",
+        "assets": ["apps/todo-server/src/assets"]
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "todo-server:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "todo-server:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/todo-server/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

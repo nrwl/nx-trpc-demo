@@ -15,6 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@nx-trpc-demo/todo-trpc-client": ["libs/todo-trpc-client/src/index.ts"],
+      "@nx-trpc-demo/todo-trpc-server": ["libs/todo-trpc-server/src/index.ts"],
       "@nx-trpc-demo/trpc": ["libs/trpc/src/index.ts"]
     }
   },
