@@ -1,24 +1,25 @@
 import { TodoItem } from '@nx-trpc-demo/todo-trpc-server';
 import { useEffect, useState } from 'react';
-import { queryClient, trpc } from './app';
+import { trpc } from './app';
 
 export default function TodoList() {
   const todoList = trpc.todoList.useQuery();
+  const utils = trpc.useContext();
   const addTodo = trpc.createTodoItem.useMutation({
-    onSuccess: (data) => {
-      //   queryClient.setQueryData(['todoList'], (old: TodoItem[] | undefined) => {
-      //     console.log(old);
-      //     console.log(data);
-      //     return [...(old || []), data];
-      //   });
-      todoList.refetch();
-    },
+    onSuccess: (data) =>
+      utils.todoList.setData(undefined, (old) => [...(old || []), data]),
   });
   const completeTodo = trpc.completeTodoItem.useMutation({
-    onSuccess: () => todoList.refetch(),
+    onSuccess: (data) => {
+      utils.todoList.setData(undefined, (old) => updateTodoItem(data, old));
+      focusCheckbox(data);
+    },
   });
   const markTodoIncomplete = trpc.markTodoItemIncomplete.useMutation({
-    onSuccess: () => todoList.refetch(),
+    onSuccess: (data) => {
+      utils.todoList.setData(undefined, (old) => updateTodoItem(data, old));
+      focusCheckbox(data);
+    },
   });
   const [newTodo, setNewTodo] = useState('');
   const isLoading = () => {
@@ -31,8 +32,8 @@ export default function TodoList() {
   };
 
   return (
-    <div className="m-2 flex items-center rounded-sm">
-      <div className="w-full px-4 mx-auto shadow lg:w-1/3">
+    <div className="m-2 flex items-center bg-slate-800 rounded-sm">
+      <div className="w-full px-4 mx-auto shadow lg:w-1/3 rounded-sm">
         <div className="flex items-center mb-6">
           <h1 className="mr-6 text-4xl font-bold text-slate-400 text-center w-full">
             Todo List
@@ -46,7 +47,7 @@ export default function TodoList() {
             setNewTodo('');
           }}
         >
-          <label htmlFor="todo" className="pt-1 mr-2">
+          <label htmlFor="todo" className="pt-1 mr-2 text-slate-400">
             Add a new todo item:{' '}
           </label>
           <TextInput
@@ -70,23 +71,27 @@ export default function TodoList() {
             Create
           </button>
         </form>
-        <ul className="list-reset">
-          {todoList.data?.map((todo) => (
-            <li key={todo.id}>
-              <Item
-                disabled={isLoading()}
-                todo={todo}
-                handleClick={() => {
-                  if (todo.complete) {
-                    markTodoIncomplete.mutate(todo.id);
-                  } else {
-                    completeTodo.mutate(todo.id);
-                  }
-                }}
-              />
-            </li>
-          ))}
-        </ul>
+        {todoList.status === 'success' ? (
+          <ul className="list-reset">
+            {todoList.data?.map((todo) => (
+              <li key={todo.id}>
+                <Item
+                  disabled={isLoading()}
+                  todo={todo}
+                  handleClick={() => {
+                    if (todo.complete) {
+                      markTodoIncomplete.mutate(todo.id);
+                    } else {
+                      completeTodo.mutate(todo.id);
+                    }
+                  }}
+                />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div>Loading...</div>
+        )}
       </div>
     </div>
   );
@@ -135,7 +140,7 @@ function Item({
       }}
     >
       <input
-        id={`${todo.id}`}
+        id={`checkbox-${todo.id}`}
         type="checkbox"
         checked={todo.complete}
         disabled={disabled}
@@ -154,4 +159,23 @@ function Item({
       </label>
     </div>
   );
+}
+
+function updateTodoItem(
+  item: TodoItem,
+  list: TodoItem[] | undefined
+): TodoItem[] {
+  if (!list) {
+    throw new Error('Should not mutate if no todolist');
+  }
+  const toUpdate = list?.findIndex((todo) => todo.id === item.id);
+  list[toUpdate] = item;
+  return list;
+}
+
+function focusCheckbox(todoItem: TodoItem) {
+  const checkbox = document.querySelector(
+    `input#checkbox-${todoItem.id}`
+  ) as HTMLInputElement;
+  setTimeout(() => checkbox.focus(), 50);
 }
